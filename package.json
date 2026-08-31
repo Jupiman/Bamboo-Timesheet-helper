@@ -1,0 +1,25 @@
+{
+  "name": "bamboohr-timesheet-helper",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Assisted CLI helper for manual, user-confirmed BambooHR timesheet entry.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "setup": "npm install && npx playwright install chromium && node -e \"import('fs').then(fs => !fs.existsSync('.env') && fs.copyFileSync('.env.example', '.env'))\"",
+    "fill": "tsx src/fill-timesheet.ts",
+    "dry-run": "tsx src/fill-timesheet.ts --dry-run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "playwright": "^1.54.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
