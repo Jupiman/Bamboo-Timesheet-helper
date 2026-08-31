@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -35,9 +34,25 @@ import { validateIntervals } from "./validation.js";
 
 const currentFile = fileURLToPath(import.meta.url);
 const projectRoot = resolve(dirname(currentFile), "..");
-const baseUrl = process.env.BAMBOOHR_BASE_URL ?? "https://onearc.bamboohr.com";
-const scheduleConfigPath =
-  process.env.WEEKDAY_TEMPLATES_PATH ?? resolve(projectRoot, "config", "weekday-templates.json");
+const configDir = resolve(projectRoot, "config");
+const baseUrlConfigPath = resolve(configDir, "bamboohr-config.json");
+const scheduleConfigPath = resolve(configDir, "weekday-templates.json");
+
+async function loadBaseUrl(): Promise<string> {
+  const json = await readFile(baseUrlConfigPath, "utf8");
+  const parsed: unknown = JSON.parse(json);
+
+  if (!parsed || typeof parsed !== "object") {
+    throw new Error(`Invalid BambooHR config: ${baseUrlConfigPath}`);
+  }
+
+  const baseUrl = (parsed as { baseUrl?: unknown }).baseUrl;
+  if (typeof baseUrl !== "string" || baseUrl.trim().length === 0) {
+    throw new Error(`Missing or invalid baseUrl in ${baseUrlConfigPath}`);
+  }
+
+  return baseUrl.trim().replace(/\/+$/, "");
+}
 
 type WeekdayKey = "mon" | "tue" | "wed" | "thu" | "fri";
 
@@ -167,6 +182,7 @@ async function main(): Promise<void> {
   const month = `${year}-${monthStr}`;
 
   const templateConfig = await loadWeekdayTemplateConfig();
+  const baseUrl = await loadBaseUrl();
 
   ensureArtifactsDirs(projectRoot);
   const logger = new JsonLogger(projectRoot);
