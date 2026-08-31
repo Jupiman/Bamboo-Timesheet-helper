@@ -5,3 +5,4 @@ artifacts/logs/*.jsonl
 artifacts/screenshots/*.png
 artifacts/html/*.html
 *.log
+.node/
