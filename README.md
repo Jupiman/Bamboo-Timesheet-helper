@@ -1,17 +1,18 @@
-#BambooHR Timesheet Helper
-##What it is
+BambooHR Timesheet Helper
+
+**What it is**
 An assisted command-line tool for entering actual work time into BambooHR via an automated browser window.
 
-##What it does
+**What it does**
 The helper automatically inputs your pre-configured daily work schedules from your local settings file into your weekdays.
 
 It automatically skips weekends.
 
 It automatically skips any day containing a Vacation entry, so you can fill any remaining time manually.
 
-It never clicks final submission or approval buttons—final review and submission are always manual and performed by you.
+**The Workflow**
+Before start: Change days to fit your work schedule in /config/weekday-templates.json. Change URL in /config/bamboohr-config.json to your BambooHR instance URL.
 
-##The Workflow
 Start: Launch the helper by running the main batch file: run.bat
 
 Log In: A browser window opens to your BambooHR portal, where you manually complete your password login and Multi-Factor Authentication (MFA).
@@ -20,17 +21,17 @@ Process Days: The tool automatically navigates to your timesheet and checks each
 
 Manual Review: The browser remains open at the end so you can manually review the entries.
 
-##Changing Script Behavior
+**Changing Script Behavior**
 By default, running run.bat automatically targets the current pay period (--period this). You can append optional flags to the command to change how the helper behaves:
 
-###Target the previous pay period:
+**Target the previous pay period:**
 run.bat --period past
 
-###Simulation Mode (Dry Run):
+**Simulation Mode (Dry Run):**
 Inspects your timesheet days and prints existing entries to the console, but never writes any data into BambooHR.
 run.bat --dry-run
 
-###Debug Mode:
+**#Debug Mode:**
 Enables verbose visual pacing and interactive browser debugging tools.
 run.bat --debug
 
